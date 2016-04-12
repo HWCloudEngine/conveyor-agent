@@ -1,0 +1,6 @@
+#!/usr/bin/python
+from conveyoragent.cmd.conveyoragent_api import main
+import sys
+
+if __name__ == "__main__":
+    sys.exit(main())

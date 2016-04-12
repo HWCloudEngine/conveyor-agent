@@ -1,0 +1,18 @@
+# v2v-rootwrap command filters for v2v-gateway
+# This file should be owned by (and only-writeable by) the root user
+
+[Filters]
+# v2v/brick/base.py: 
+ll: CommandFilter, ll, root
+
+ls: CommandFilter, ls, root
+
+df: CommandFilter, df, root
+
+awk: CommandFilter, awk, root
+
+grep: CommandFilter, grep, root
+mkfs: CommandFilter, mkfs, root
+mount: CommandFilter, mount, root
+dd: CommandFilter, dd, root
+
