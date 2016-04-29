@@ -17,16 +17,21 @@
 #    under the License.
 import time
 import random
+import threading
 from eventlet import greenthread
 
 import oslo.six as six
 from oslo.config import cfg
 
+from conveyoragent.common import uuidutils
 from conveyoragent.common import importutils
 from conveyoragent.common import log as logging
 from conveyoragent.brick import base
 from conveyoragent import utils
 from conveyoragent import exception
+from conveyoragent.engine.common import transformer_state
+from conveyoragent.engine.common import transformer
+from conveyoragent.engine.common import task_status
 
 migrate_manager_opts = [
     cfg.StrOpt('transformer_agent',
@@ -43,6 +48,8 @@ CONF.register_opts(migrate_manager_opts)
 
 LOG = logging.getLogger(__name__)
 
+_trans_state = {}
+
 class MigrationManager(object):
     
     def __init__(self, transformer_agent=None, *args, **kwargs):
@@ -53,7 +60,9 @@ class MigrationManager(object):
         if not transformer_agent:
             transformer_agent = CONF.transformer_agent
             
-        self.agent = importutils.import_object(transformer_agent)        
+        self.agent = importutils.import_object(transformer_agent) 
+        
+        self.trans_states =  transformer_state.TransformerSate()      
     
     def check_disk_exist(self, context, disk_name=None):
         
@@ -144,6 +153,16 @@ class MigrationManager(object):
             
     
     
+    def query_data_transformer_state(self, task_id):
+        try:
+            state = self.trans_states.get_task_state(task_id)
+            return state
+        except exception.V2vException as ext:
+            LOG.error("Query task %(task_id)s state error: %(error)s",
+                      {'task_id': task_id,'error': ext})
+            _msg = "Query task state error"
+            raise exception.V2vException(message=_msg)
+        
     def clone_volume(self, volume):
         
         src_disk_name = volume.get('src_dev_name')
@@ -174,11 +193,45 @@ class MigrationManager(object):
         host_ip = urls[0]
         host_port = urls[1]
         try:
-            self.downLoadDirTree(host_ip, host_port, mount_dir, mount_dir)
+            #create transformer task and return task id for quering its state
+            task_id = uuidutils.generate_uuid()
+            task_state = task_status.TRANSFORMERING
+            task = transformer.TransformerTask(task_id, task_state=task_state)
+            self.trans_states.add_task(task)
+            
+            #start data transformer task thread
+            args = [host_ip, host_port, mount_dir, mount_dir]
+            thread = AgentThread(self.downLoadDirTree, self.trans_states, task_id, *args)
+            thread.start()
+            return task_id
+            #self.downLoadDirTree(host_ip, host_ip, mount_dir, mount_dir)
         except Exception as e:
-            LOG.error("DownLoad data error: ")
+            LOG.error("DownLoad data error: %s", e)
             raise exception.DownLoadDataError(error=e)
 
 
 
+class AgentThread(threading.Thread):
+    
+    def __init__(self, fun, state_ops_cls, task_id, *args):
+        threading.Thread.__init__(self)
+        self.fun = fun
+        self.args = args
+        self.trans_states = state_ops_cls
+        self.task_id = task_id
+    
+    
+    def run(self):
+        args = self.args
+        if self.fun:
+            try:
+                self.fun(*args)
+                self.trans_states.update_state(self.task_id, task_status.FINISHED) 
+            except Exception as e:
+                self.trans_states.update_state(self.task_id, task_status.ERROR) 
+                LOG.error("Conveyor agent operator %(ops)s error: %(error)s",
+                          {'ops': self.fun, 'error': e})
+                msg = "Operator %s error" % self.fun
+                raise exception.V2vException(message=msg)
+    
 

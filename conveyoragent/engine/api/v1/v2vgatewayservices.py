@@ -48,7 +48,17 @@ class V2vGateWayServiceController(wsgi.Controller):
 
     def show(self, req, id):
         """Return data about the given resource."""
-        pass
+        LOG.debug("Query task state start: %s", id)
+        
+        try:
+            state = self.migration_manager.query_data_transformer_state(id)
+            LOG.debug("Query task state end: %s", id)
+            return self.viewBulid.show(state)
+        except Exception as e:
+            LOG.error("Query task %(task_id)s state error: %(error)s",
+                      {'task_id': id, 'error': e})
+            msg = _("Query data transformer task state failed")
+            raise exc.HTTPBadRequest(explanation=msg)
 
     def delete(self, req, id):
         """Delete resource."""     
@@ -73,10 +83,13 @@ class V2vGateWayServiceController(wsgi.Controller):
         volume = body['clone_volume']
         
         try:
-            self.migration_manager.clone_volume(volume)
+            state = self.migration_manager.clone_volume(volume)
+            
+            return self.viewBulid.create(state)
                  
         except Exception as e:
-            msg = _("clone volume data failed: %s", e)
+            LOG.error("Clone volume data error: %s", e)
+            msg = _("clone volume data failed")
             raise exc.HTTPBadRequest(explanation=msg)
             
 

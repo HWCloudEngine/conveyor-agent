@@ -1,4 +1,4 @@
-# Copyright (c) 2013 OpenStack Foundation
+# Copyright 2011 OpenStack Foundation.
 # All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -12,24 +12,13 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-from conveyoragent.common import log as logging
 
-from conveyoragent.engine.api.common import ViewBuilder
+"""
+status of a transformer task.
+"""
 
-LOG = logging.getLogger(__name__)
+TASK_STATUS = (TRANSFORMERING, FINISHED, ERROR) = (
+               'DATA_TRANSFORMING', 'DATA_TRANS_FINISHED', 'DATA_TRANS_FAILED')
 
-class ViewBuilder(ViewBuilder):
-    
-    def list(self, results):
-        pass
-    
-    def show(self,result):
-        rsp = {'body':{'task_state': result
-                               }}
-        return rsp
-    
-    def create(self, result):
-        rsp = {'body':{'task_id': result
-                               }}
-        return rsp
-    
+
+

@@ -81,7 +81,7 @@ class MigrationCmd(BaseCmd):
             (out, err) = self._execute('df', '-T', run_as_root=True)
             
             lines = out.split('\n')
-
+            disk_format = None
             for line in lines:
                 if disk_name in line:
                     values = [l for l in line.split(" ") if l != '']                      
@@ -94,6 +94,7 @@ class MigrationCmd(BaseCmd):
             
             LOG.error("query disk format cmd error: disk name is %(disk_name)s, error detail is %(error)s",
                       {'disk_name': disk_name, 'error': e})
+            return None
 
     
     def get_disk_mount_point(self, disk_name):
@@ -104,7 +105,7 @@ class MigrationCmd(BaseCmd):
             (out, err) = self._execute('df', '-T', run_as_root=True)
             
             lines = out.split('\n')
-
+            mount_point = None
             for line in lines:
                 if disk_name in line:
                     values = [l for l in line.split(" ") if l != '']                      
@@ -117,6 +118,7 @@ class MigrationCmd(BaseCmd):
             
             LOG.error("query disk mount point cmd error: disk name is %(disk_name)s, error detail is %(error)s",
                       {'disk_name': disk_name, 'error': e})
+            return None
     
     def format_disk(self, disk_name, disk_format):
         

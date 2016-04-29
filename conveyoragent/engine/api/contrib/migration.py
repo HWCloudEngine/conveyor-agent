@@ -58,12 +58,12 @@ class MigrationActionController(wsgi.Controller):
         
         disk_name = body['getDiskFormat']['disk_name']
         
-        LOG.error("Query disk start format: %s", disk_name)
+        LOG.debug("Query disk start format: %s", disk_name)
 
         out =  self.migration_manager.get_disk_format(defaultContext, disk_name)
         
         resp = {"disk_format": out}
-        LOG.error("Query disk format end: %s", out)
+        LOG.debug("Query disk format end: %s", out)
         return resp
     
     @wsgi.action('formatDisk')   

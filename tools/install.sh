@@ -181,7 +181,7 @@ copy_files_to_dir()
     mkdir ${CONFIG_DIR}
 
     #copy config file to /etc/v2v
-    cp ../etc/conveyoragent/* ${CONFIG_DIR}
+    cp -r ../etc/conveyoragent/* ${CONFIG_DIR}
 }
 
 
