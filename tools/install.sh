@@ -26,7 +26,7 @@ GATEWAY_REGISTER_SERVICE_NAME=v2vGateWay
 GATEWAY_REGISTER_SERVICE_TYPE=v2vGateWay
 
 #source code file directory
-CODE_DIR=/usr/lib/python2.6/site-packages
+CODE_DIR=/usr/lib/python2.7/dist-packages
 CONFIG_DIR=/etc/conveyoragent
 BIN_DIR=/usr/local/bin
 GATEWAY_CONFIG_FILE=hybrid-v2v.conf
@@ -156,7 +156,7 @@ copy_files_to_dir()
 		    rm -f ${BIN_DIR}/$f
 		fi
 		
-        cp $f ${BIN_DIR}
+        cp -a $f ${BIN_DIR}
 		
 		if [ ! -x ${BIN_DIR}/$f ]; then
 		  chmod +x ${BIN_DIR}/$f
@@ -181,7 +181,7 @@ copy_files_to_dir()
     mkdir ${CONFIG_DIR}
 
     #copy config file to /etc/v2v
-    cp -r ../etc/conveyoragent/* ${CONFIG_DIR}
+    cp -a ../etc/conveyoragent/* ${CONFIG_DIR}
 }
 
 

@@ -77,11 +77,11 @@ class MigrationCmd(BaseCmd):
         #(out, err) = self._execute('df', '-T', '|', 'awk', '\''+ '$1==' + '"' + disk_name + '"' +' {print $2}\'', run_as_root=True)
         #(out, err) = self._execute('df ' + '-T' + ' |' + ' grep '  + disk_name, run_as_root=True)
         try:
-            
+            disk_format = None
             (out, err) = self._execute('df', '-T', run_as_root=True)
             
             lines = out.split('\n')
-            disk_format = None
+              
             for line in lines:
                 if disk_name in line:
                     values = [l for l in line.split(" ") if l != '']                      
@@ -100,12 +100,12 @@ class MigrationCmd(BaseCmd):
     def get_disk_mount_point(self, disk_name):
         '''query disk mount point.'''
         try:
-            
+            mount_point = None
             ##multi partition must add later TODO
             (out, err) = self._execute('df', '-T', run_as_root=True)
             
             lines = out.split('\n')
-            mount_point = None
+
             for line in lines:
                 if disk_name in line:
                     values = [l for l in line.split(" ") if l != '']                      
