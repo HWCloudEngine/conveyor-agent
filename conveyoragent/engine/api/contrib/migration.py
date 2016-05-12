@@ -88,6 +88,18 @@ class MigrationActionController(wsgi.Controller):
         LOG.debug("Query disk %(disk_name)s mount point %(mount_point)s end",
                   {'disk_name': disk_name, 'mount_point': out})
         return resp
+
+    @wsgi.action('getDiskName')
+    def _get_disk_name(self, req, id, body):
+        
+        volume_id = body['getDiskName']['volume_id']
+        LOG.debug("Query disk %s mount point start", volume_id)
+        out = self.migration_manager.get_disk_name(defaultContext, volume_id)
+        resp = {"dev_name": out}
+        
+        LOG.debug("Query disk %(disk_name)s mount point %(mount_point)s end",
+                  {'disk_name': volume_id, 'mount_point': out})
+        return resp
         
     
     @wsgi.action('mountDisk')

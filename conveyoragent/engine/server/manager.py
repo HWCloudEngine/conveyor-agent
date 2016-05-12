@@ -15,6 +15,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+import os
 import time
 import random
 import threading
@@ -38,10 +39,9 @@ migrate_manager_opts = [
                default='conveyoragent.engine.agent.ftp.ftp.FtpAgent',
                help='agent to transformer  data'),
                         
-    cfg.StrOpt('device_link_path',
-               default='/home/.gy-volume-id/',
-               help='volume directory'),
-]
+                cfg.StrOpt('volume_name_path',
+                default="/home/.by-volume-id",
+                help='')]
 
 CONF = cfg.CONF
 CONF.register_opts(migrate_manager_opts)
@@ -99,8 +99,16 @@ class MigrationManager(object):
         
         return stdout
     
-    def get_disk_name(self, volume_id):
-        pass
+    def get_disk_name(self, context, volume_id):
+        
+        volume_path = CONF.volume_name_path + '/' + volume_id
+        
+        try:
+            dev_name = os.path.realpath(volume_path)
+            return dev_name
+        except Exception as e:
+            LOG.error("Query disk name error: %s", e)
+            return None
     
     
     

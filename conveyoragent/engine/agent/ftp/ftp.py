@@ -36,7 +36,7 @@ ftp_paras = [
                default="root",
                help=''),
     cfg.StrOpt('user_passwd',
-               default="magento",
+               default="hybrid@123",
                help=''),             
     cfg.IntOpt('max_lines',
                default=8192,
