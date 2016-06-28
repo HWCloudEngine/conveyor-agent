@@ -77,15 +77,23 @@ class MigrationCmd(BaseCmd):
         #(out, err) = self._execute('df', '-T', '|', 'awk', '\''+ '$1==' + '"' + disk_name + '"' +' {print $2}\'', run_as_root=True)
         #(out, err) = self._execute('df ' + '-T' + ' |' + ' grep '  + disk_name, run_as_root=True)
         try:
+            dev_names = disk_name.lstrip().split('/')
+            if len(dev_names) > 1:
+                dev_name = dev_names[-1]
+            else:
+                dev_name = disk_name
+                
             disk_format = None
-            (out, err) = self._execute('df', '-T', run_as_root=True)
+            (out, err) = self._execute('lsblk', '-lf', run_as_root=True)
             
             lines = out.split('\n')
               
             for line in lines:
-                if disk_name in line:
+                if dev_name in line:
                     values = [l for l in line.split(" ") if l != '']                      
                     LOG.error("line: %s", values)
+                    if len(values) < 2:
+                        return None
                     disk_format = values[1]
                     break
             return disk_format
@@ -129,27 +137,54 @@ class MigrationCmd(BaseCmd):
         
         except putils.ProcessExecutionError as e:
             
-            LOG.error("query disk mount point cmd error: disk name is %(disk_name)s, error detail is %(error)s",
+            LOG.error("format disk cmd error: disk name is %(disk_name)s, error detail is %(error)s",
                       {'disk_name': disk_name, 'error': e})
             
-            raise exception.FormatDiskError(error = e)
+            return None
 
     
     def mount_disk(self, disk, mount_point):
         
-        disk_name = disk['des_dev_name']
-        disk_format = disk['src_dev_format']        
+        disk_name = disk['disk_name']
+        disk_format = disk.get('disk_format')       
         
         try:
-            
-            (out, err) = self._execute('mount', '-t', disk_format, disk_name, mount_point, run_as_root=True)
+            if disk_format:
+                (out, err) = self._execute('mount', '-t', disk_format, disk_name, mount_point, run_as_root=True)
+            else:
+                (out, err) = self._execute('mount', disk_name, mount_point, run_as_root=True)
+                
             disk['mount_point'] = mount_point
             return disk
         
         except putils.ProcessExecutionError as e:
             
-            LOG.error("query disk mount point cmd error: disk name is %(disk_name)s, error detail is %(error)s",
+            LOG.error("Mount disk cmd error: disk name is %(disk_name)s, error detail is %(error)s",
                       {'disk_name': disk_name, 'error': e})
+            return None
+    
+    def umount_disk(self, mount_point):
+        
+        try: 
+            (out, err) = self._execute('umount', mount_point, run_as_root=True)
+            return out
+        
+        except putils.ProcessExecutionError as e:
+            
+            LOG.error("umount disk error: %s", e)
+            return None
+    
+    def remove_dir(self, dir_mame):
+
+        try: 
+            (out, err) = self._execute('rm', '-rf',  dir_mame, run_as_root=True)
+            return out
+        
+        except putils.ProcessExecutionError as e:
+            
+            LOG.error("remove directory %(dir)s error: %(error)s",
+                      {'dir': dir_mame, 'error': e})
+            return None
             
     
     def get_disk_info(self, disk_name):
@@ -167,6 +202,7 @@ class MigrationCmd(BaseCmd):
             
             LOG.error("query disk mount point cmd error: disk name is %(disk_name)s, error detail is %(error)s",
                       {'disk_name': disk_name, 'error': e})
+            return None
     
     def make_dir(self, dir_name):
         try:

@@ -237,10 +237,16 @@ class FtpAgent(object):
         return
     
     
-    def downLoadFileExt(self, localpath, remotepath):
+    def downLoadFileExt(self, host, port,localpath, remotepath):
         '''Down load file include resuming broken transfer'''
+        if not host:
+            host = self.host
+            
+        if not port:
+            self.port = port
+
         if not self.connect:
-            self.connectFtp(self.host, self.port, self.user, self.passwd, self.timeout)
+            self.connectFtp(host, self.port, self.user, self.passwd, self.timeout)
             
             #reconnect policy add later
             if not self.connect:

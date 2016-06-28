@@ -93,24 +93,44 @@ class MigrationActionController(wsgi.Controller):
     def _get_disk_name(self, req, id, body):
         
         volume_id = body['getDiskName']['volume_id']
-        LOG.debug("Query disk %s mount point start", volume_id)
+        LOG.debug("Query volume %s dev name start", volume_id)
         out = self.migration_manager.get_disk_name(defaultContext, volume_id)
         resp = {"dev_name": out}
         
-        LOG.debug("Query disk %(disk_name)s mount point %(mount_point)s end",
-                  {'disk_name': volume_id, 'mount_point': out})
+        LOG.debug("Query volume %(volume_id)s dev name %(dev_name)s end",
+                  {'volume_id': volume_id, 'dev_name': out})
         return resp
         
     
     @wsgi.action('mountDisk')
     def _mount_disk(self, req, id, body):
         
-        disk_name = body['mount_disk']['disk_name']
+        disk = body['mountDisk']['disk']
         
-        mount_point = body['mount_disk']['mount_point']
+        mount_point = body['mountDisk']['mount_point']
         
-        out = self.migration_manager.mount_disk(defaultContext, disk_name, mount_point)
+        out = self.migration_manager.mount_disk(defaultContext, disk, mount_point)
         resp = {"mount_disk": out}
+        return resp
+
+    @wsgi.action('forceMountDisk')
+    def _force_mount_disk(self, req, id, body):
+        
+        disk_name = body['forceMountDisk']['disk']
+        
+        mount_point = body['forceMountDisk']['mount_point']
+        
+        out = self.migration_manager.force_mount_disk(defaultContext, disk_name, mount_point)
+        resp = {"mount_disk": out}
+        return resp
+    
+    @wsgi.action('forceUmountDisk')
+    def _force_umount_disk(self, req, id, body):
+        
+        mount_point = body['forceUmountDisk']['mount_point']
+        
+        out = self.migration_manager.force_umont_disk(defaultContext, mount_point)
+        resp = {"umount_disk": out}
         return resp
 
 

@@ -93,11 +93,32 @@ class MigrationManager(object):
         
         return stdout
     
-    def mount_disk(self, context, disk_name, mount_point):
+    def mount_disk(self, context, disk, mount_point):
         
-        stdout = self.migrate_ssh.mount_disk(disk_name, mount_point)
+        stdout = self.migrate_ssh.mount_disk(disk, mount_point)
         
         return stdout
+
+    def force_mount_disk(self, context, disk, mount_point):
+        
+        try:
+            self.migrate_ssh.make_dir(mount_point)
+            self.migrate_ssh.mount_disk(disk, mount_point)
+            return mount_point
+        except Exception as e:
+            LOG.error("Force mount disk %(disk_name)s to dir %(mount_point)s error: %(error)s",
+                      {'disk_name': disk.get('disk_name'), 'mount_point': mount_point, 'error': e})
+            return None 
+    
+    def force_umont_disk(self, context, mount_point):
+        try:
+            self.migrate_ssh.umount_disk(mount_point)
+            self.migrate_ssh.remove_dir(mount_point)
+            return mount_point
+        except Exception as e:
+            LOG.error("Force umount dir %(mount_point)s error: %(error)s",
+                      {'mount_point': mount_point, 'error': e})
+            return None 
     
     def get_disk_name(self, context, volume_id):
         
@@ -105,6 +126,8 @@ class MigrationManager(object):
         
         try:
             dev_name = os.path.realpath(volume_path)
+            if volume_path == dev_name:
+                return None
             return dev_name
         except Exception as e:
             LOG.error("Query disk name error: %s", e)
@@ -140,13 +163,13 @@ class MigrationManager(object):
         self.agent.downLoadDirTree(host, port, localpath, remotepath)
         
     
-    def downLoadFileExt(self, localpath, remotepath):
+    def downLoadFileExt(self, host, port, localpath, remotepath):
         ''' down load file include resuming broken transfer'''
         retry = 10
         
         while retry > 0:
             try:
-                r = self.agent.downLoadFileExt(localpath, remotepath)
+                r = self.agent.downLoadFileExt(host, port, localpath, remotepath)
                 
                 if r == 0:
                     break 
@@ -186,6 +209,8 @@ class MigrationManager(object):
         self.migrate_ssh.make_dir(mount_dir)
        
         #mount disk to the directory
+        volume['disk_name'] = volume['des_dev_name']
+        volume['disk_format'] = volume['src_dev_format']
         self.migrate_ssh.mount_disk(volume, mount_dir)
         
         #3.download data to this disk in the directory
