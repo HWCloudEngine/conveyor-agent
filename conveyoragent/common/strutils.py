@@ -22,7 +22,7 @@ import re
 import sys
 import unicodedata
 
-import oslo.six as six
+import six
 
 from conveyoragent.common.gettextutils import _
 

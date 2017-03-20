@@ -16,7 +16,7 @@ import logging
 import random
 import time
 
-from conveyoragent.oslo.config import cfg
+from oslo_config import cfg
 import six
 
 from conveyoragent.common._i18n import _, _LE, _LI

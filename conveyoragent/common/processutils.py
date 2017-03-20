@@ -27,7 +27,7 @@ import signal
 
 from eventlet.green import subprocess
 from eventlet import greenthread
-import oslo.six as six
+import six
 
 from conveyoragent.common.gettextutils import _
 from conveyoragent.common import strutils

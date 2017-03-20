@@ -14,11 +14,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-
-
-
-
-from oslo.config import cfg
+from oslo_config import cfg
 from conveyoragent.common import log as logging
 import paste.urlmap
 

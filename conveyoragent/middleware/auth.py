@@ -17,17 +17,15 @@ Common Auth Middleware.
 
 """
 
-
 import os
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
-#from oslo_middleware import request_id
-from oslo.serialization import jsonutils
+from oslo_config import cfg
+from oslo_serialization import jsonutils
 import webob.dec
 import webob.exc
 
 from conveyoragent.engine.api.wsgi import wsgi
+from conveyoragent.common import log as logging
 from conveyoragent import context
 from conveyoragent.i18n import _
 from conveyoragent import wsgi as base_wsgi

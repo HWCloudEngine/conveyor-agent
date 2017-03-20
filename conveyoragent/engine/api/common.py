@@ -13,14 +13,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-
 import os
 import re
 import urllib
 
-from oslo.config import cfg
+from oslo_config import cfg
 
-import oslo.six.moves.urllib.parse as urlparse
+import six.moves.urllib.parse as urlparse
 import webob
 
 from conveyoragent.common import log as logging

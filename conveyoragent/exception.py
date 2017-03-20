@@ -24,10 +24,9 @@ SHOULD include dedicated exception logging.
 
 import sys
 
-from oslo.config import cfg
+from oslo_config import cfg
 from conveyoragent.common import log as logging
-import oslo.six as six
-#import webob.exc
+import six
 
 from conveyoragent.i18n import _, _LE
 

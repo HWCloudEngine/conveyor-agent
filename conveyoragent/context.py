@@ -20,7 +20,7 @@
 import copy
 import uuid
 
-import oslo.six as six
+import six
 
 import exception
 from conveyoragent.i18n import _

@@ -16,8 +16,7 @@
 import os.path
 import re
 
-#from lxml import etree
-import oslo.six as six
+import six
 
 from conveyoragent.i18n import _
 from conveyoragent import utils

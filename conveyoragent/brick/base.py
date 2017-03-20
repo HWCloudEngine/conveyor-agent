@@ -18,13 +18,7 @@ Helper code for the iSCSI volume driver.
 
 """
 
-import os
-import re
-import stat
-import time
-
-import oslo.six as six
-from oslo.config import cfg
+from oslo_config import cfg
 
 from conveyoragent.common import processutils as putils
 from conveyoragent.brick import executor

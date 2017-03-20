@@ -27,9 +27,7 @@ stepping stone.
 
 import socket
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
-from oslo.utils import netutils
+from oslo_config import cfg
 
 from conveyoragent.i18n import _
 

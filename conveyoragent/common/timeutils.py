@@ -22,7 +22,7 @@ import datetime
 import time 
 
 import iso8601
-import oslo.six as six
+import six
 
 
 # ISO 8601 extended time format with microseconds

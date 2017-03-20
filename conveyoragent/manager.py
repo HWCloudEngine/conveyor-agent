@@ -52,9 +52,9 @@ This module provides Manager, a base class for managers.
 """
 
 
-from oslo.config import cfg
+from oslo_config import cfg
 from conveyoragent.common import log as logging
-import oslo.messaging as messaging
+import oslo_messaging as messaging
 
 
 from conveyoragent.common import periodic_task

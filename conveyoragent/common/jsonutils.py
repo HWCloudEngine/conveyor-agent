@@ -56,8 +56,8 @@ if sys.version_info < (2, 7):
 else:
     import json
 
-import oslo.six as six
-import oslo.six.moves.xmlrpc_client as xmlrpclib
+import six
+import six.moves.xmlrpc_client as xmlrpclib
 
 from conveyoragent.common import gettextutils
 from conveyoragent.common import importutils

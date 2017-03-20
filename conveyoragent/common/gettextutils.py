@@ -29,7 +29,7 @@ from logging import handlers
 import os
 
 from babel import localedata
-import oslo.six as six
+import six
 
 _AVAILABLE_LANGUAGES = {}
 

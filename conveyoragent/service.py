@@ -20,27 +20,18 @@
 
 import inspect
 import os
-import random
 
+from oslo_config import cfg
+from oslo_db import exception as db_exc
 
-from oslo.config import cfg
-from oslo.db import exception as db_exc
-
-import oslo.messaging as messaging
-from oslo.utils import importutils
-#import osprofiler.notifier
-#from osprofiler import profiler
-#import osprofiler.web
+from oslo_utils import importutils
 
 from conveyoragent.common import processutils
 from conveyoragent.common import log as logging
 from conveyoragent import context
-#from conveyoragent import db
 from conveyoragent import exception
 from conveyoragent.i18n import _, _LE, _LI, _LW
-from conveyoragent.common import loopingcall
 from conveyoragent.common import service
-#from conveyoragent import rpc
 from conveyoragent import version
 from conveyoragent import wsgi
 

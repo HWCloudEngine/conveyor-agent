@@ -22,9 +22,9 @@ import os
 import string
 
 from eventlet import pools
-from oslo.config import cfg
+from oslo_config import cfg
 import paramiko
-import oslo.six as six
+import six
 
 from conveyoragent.common import log as logging
 from conveyoragent import exception

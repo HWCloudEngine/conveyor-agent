@@ -16,9 +16,9 @@
 
 import os
 
-from oslo.config import cfg
+from oslo_config import cfg
 from conveyoragent.common import log as logging
-from oslo.utils import importutils
+from oslo_utils import importutils
 import webob.dec
 import webob.exc
 

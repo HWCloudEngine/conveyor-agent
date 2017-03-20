@@ -16,13 +16,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 import os
-import time
-import random
 import threading
-from eventlet import greenthread
 
-import oslo.six as six
-from oslo.config import cfg
+from oslo_config import cfg
 
 from conveyoragent.common import uuidutils
 from conveyoragent.common import importutils

@@ -19,7 +19,7 @@
 
 import sys
 
-from oslo.config import cfg
+from oslo_config import cfg
 from conveyoragent.common import log as logging
 
 from conveyoragent import i18n

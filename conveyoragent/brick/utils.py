@@ -17,8 +17,7 @@
 
 import math
 
-from Crypto.Random import random
-from oslo.config import cfg
+from oslo_config import cfg
 
 
 from conveyoragent import exception

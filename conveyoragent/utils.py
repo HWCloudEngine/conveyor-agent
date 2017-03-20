@@ -35,13 +35,12 @@ from xml import sax
 from xml.sax import expatreader
 from xml.sax import saxutils
 
-#from oslo.concurrency import lockutils
-from oslo.config import cfg
+from oslo_config import cfg
 
-from oslo.utils import importutils
-from oslo.utils import timeutils
+from oslo_utils import importutils
+from oslo_utils import timeutils
 import retrying
-import oslo.six as six
+import six
 
 from conveyoragent.common import log as logging
 from conveyoragent.common import processutils

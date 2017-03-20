@@ -12,15 +12,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-#from pbr import version as pbr_version
+from pbr import version as pbr_version
 
 V2V_VENDOR = "HybridCloud Foundation"
 V2V_PRODUCT = "HybridCloud V2v"
 V2V_PACKAGE = None  # OS distro package version suffix
 
 loaded = False
-#version_info = pbr_version.VersionInfo('conveyoragent')
-#version_string = version_info.version_string
-def version_string():
-    return 'conveyoragent'
+version_info = pbr_version.VersionInfo('conveyoragent')
+version_string = version_info.version_string
 

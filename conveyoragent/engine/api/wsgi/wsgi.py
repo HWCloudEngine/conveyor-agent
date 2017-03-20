@@ -20,10 +20,9 @@ import time
 from xml.dom import minidom
 from xml.parsers import expat
 
-#from lxml import etree
-from oslo.serialization import jsonutils
-from oslo.utils import excutils
-import oslo.six as six
+from oslo_serialization import jsonutils
+from oslo_utils import excutils
+import six
 import webob
 
 from conveyoragent.common import log as logging
