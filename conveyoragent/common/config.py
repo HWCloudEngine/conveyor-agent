@@ -27,24 +27,25 @@ stepping stone.
 
 import socket
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
-from oslo.utils import netutils
+from oslo_config import cfg
+from oslo_log import log as logging
 
 from conveyoragent.i18n import _
 
 
 CONF = cfg.CONF
-#logging.register_options(CONF)
+logging.register_options(CONF)
 
 core_opts = [
     cfg.StrOpt('api_paste_config',
                default="api-paste.ini",
-               help='File name for the paste.deploy config for conveyoragent-api'),
+               help='File name for the paste.deploy config for'
+                    ' conveyoragent-api'),
     cfg.StrOpt('state_path',
                default='/var/lib/conveyoragent',
                deprecated_name='pybasedir',
-               help="Top-level directory for maintaining conveyoragent's state"), ]
+               help="Top-level directory for maintaining"
+                    " conveyoragent's state"), ]
 
 debug_opts = [
 ]
@@ -64,8 +65,8 @@ global_opts = [
                help='Default glance port'),
     cfg.ListOpt('glance_api_servers',
                 default=['$glance_host:$glance_port'],
-                help='A list of the glance API servers available to conveyoragent '
-                     '([hostname|ip]:port)'),
+                help='A list of the glance API servers available to '
+                     'conveyoragent ([hostname|ip]:port)'),
     cfg.IntOpt('glance_api_version',
                default=1,
                help='Version of the glance API to use'),
@@ -115,7 +116,8 @@ global_opts = [
                      'volume_extension option with conveyoragent.api.contrib.'
                      'select_extensions'),
     cfg.MultiStrOpt('osapi_v2v_extension',
-                    default=['conveyoragent.engine.api.contrib.standard_extensions'],
+                    default=['conveyoragent.engine.api.contrib'
+                             '.standard_extensions'],
                     help='osapi volume extension to load'),
     cfg.StrOpt('host',
                default=socket.gethostname(),

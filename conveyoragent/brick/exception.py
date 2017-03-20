@@ -14,8 +14,9 @@
 
 """Exceptions for the Brick library."""
 
+from oslo_log import log as logging
+
 from conveyoragent.i18n import _
-from conveyoragent.common import log as logging
 
 
 LOG = logging.getLogger(__name__)
@@ -83,13 +84,14 @@ class Invalid(BrickException):
 class InvalidParameterValue(Invalid):
     message = _("%(err)s")
 
+
 class FormatDiskError(BrickException):
     message = _('Format disk CMD error:%(error)s"')
+
 
 class MountDiskError(BrickException):
     message = _('Mount disk CMD error:%(error)s"')
 
+
 class MakeDirError(BrickException):
-    message = _('Make directory CMDerror:%(error)s"')    
-
-
+    message = _('Make directory CMDerror:%(error)s"')

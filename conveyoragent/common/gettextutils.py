@@ -29,7 +29,7 @@ from logging import handlers
 import os
 
 from babel import localedata
-import oslo.six as six
+import six
 
 _AVAILABLE_LANGUAGES = {}
 
@@ -38,8 +38,7 @@ USE_LAZY = False
 
 
 class TranslatorFactory(object):
-    """Create translator functions
-    """
+    """Create translator functions"""
 
     def __init__(self, domain, localedir=None):
         """Establish a set of translation functions for the domain.

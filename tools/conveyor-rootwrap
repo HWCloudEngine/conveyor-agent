@@ -4,7 +4,7 @@
 
 import sys
 
-from oslo.rootwrap.cmd import main
+from oslo_rootwrap.cmd import main
 
 
 if __name__ == "__main__":

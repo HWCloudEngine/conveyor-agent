@@ -771,8 +771,7 @@ class Netrc:
                 self.__defacct = acct or self.__defacct
             if host:
                 if host in self.__hosts:
-                    ouser, opasswd, oacct = \
-                           self.__hosts[host]
+                    ouser, opasswd, oacct = self.__hosts[host]
                     user = user or ouser
                     passwd = passwd or opasswd
                     acct = acct or oacct
@@ -808,7 +807,6 @@ class Netrc:
         return self.__macros[macro]
 
 
-
 def test():
     '''Test program.
     Usage: ftp [-d] [-r[file]] host [-l[dir]] [-d[dir]] [-p] [file] ...
@@ -819,7 +817,7 @@ def test():
     '''
 
     if len(sys.argv) < 2:
-        print test.__doc__
+        print(test.__doc__)
         sys.exit(0)
 
     debugging = 0
@@ -846,21 +844,21 @@ def test():
             userid, passwd, acct = netrc.get_account(host)
         except KeyError:
             # no account for host
-            sys.stderr.write(
-                    "No account -- using anonymous login.")
+            sys.stderr.write("No account -- using anonymous login.")
     ftp.login(userid, passwd, acct)
     for file in sys.argv[2:]:
         if file[:2] == '-l':
             ftp.dir(file[2:])
         elif file[:2] == '-d':
             cmd = 'CWD'
-            if file[2:]: cmd = cmd + ' ' + file[2:]
-            resp = ftp.sendcmd(cmd)
+            if file[2:]:
+                cmd = cmd + ' ' + file[2:]
+            # resp = ftp.sendcmd(cmd)
+            ftp.sendcmd(cmd)
         elif file == '-p':
             ftp.set_pasv(not ftp.passiveserver)
         else:
-            ftp.retrbinary('RETR ' + file, \
-                           sys.stdout.write, 1024)
+            ftp.retrbinary('RETR ' + file, sys.stdout.write, 1024)
     ftp.quit()
 
 

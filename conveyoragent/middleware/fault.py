@@ -14,10 +14,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from conveyoragent.common import log as logging
-import oslo.six as six
+import six
 import webob.dec
 import webob.exc
+
+from oslo_log import log as logging
 
 from conveyoragent.engine.api.wsgi import wsgi
 from conveyoragent import exception

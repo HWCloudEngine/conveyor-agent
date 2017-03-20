@@ -16,19 +16,17 @@
 
 import os
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
-from oslo.utils import importutils
+from oslo_config import cfg
+from oslo_log import log as logging
+from oslo_policy import policy
+from oslo_utils import importutils
 import webob.dec
 import webob.exc
 
-import conveyoragent.engine.api.wsgi
 from conveyoragent.engine.api.wsgi import wsgi
 from conveyoragent.engine.api import xmlutil
 from conveyoragent import exception
 from conveyoragent.i18n import _LE, _LI, _LW
-import conveyoragent.policy
-
 
 CONF = cfg.CONF
 
@@ -384,7 +382,7 @@ def extension_authorizer(api_name, extension_name):
             act = '%s_extension:%s' % (api_name, extension_name)
         else:
             act = '%s_extension:%s:%s' % (api_name, extension_name, action)
-        conveyoragent.policy.enforce(context, act, target)
+        policy.enforce(context, act, target)
     return authorize
 
 

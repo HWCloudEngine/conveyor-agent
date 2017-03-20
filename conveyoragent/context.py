@@ -15,19 +15,22 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-"""RequestContext: context for requests that persist through all of fs_gateway."""
+"""
+RequestContext: context for requests that persist through
+all of fs_gateway.
+"""
 
 import copy
 import uuid
 
-import oslo.six as six
+import six
 
-import exception
-from conveyoragent.i18n import _
+from oslo_log import log as logging
+from oslo_utils import timeutils
+
 from conveyoragent.common import local
-from conveyoragent.common import log as logging
-from conveyoragent.common import timeutils
-
+from conveyoragent import exception
+from conveyoragent.i18n import _
 
 LOG = logging.getLogger(__name__)
 

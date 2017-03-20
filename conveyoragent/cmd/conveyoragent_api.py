@@ -19,8 +19,8 @@
 
 import sys
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
+from oslo_config import cfg
+from oslo_log import log as logging
 
 from conveyoragent import i18n
 i18n.enable_lazy()
@@ -36,10 +36,10 @@ CONF = cfg.CONF
 
 def main():
     CONF(sys.argv[1:], project='conveyoragent',
-         version=version.version_string())    
-    
-    logging.setup("conveyoragent")
- 
+         version=version.version_string())
+
+    logging.setup(CONF, "conveyoragent")
+
     launcher = service.process_launcher()
     server = service.WSGIService('conveyoragent_api')
     launcher.launch_service(server, workers=server.workers)

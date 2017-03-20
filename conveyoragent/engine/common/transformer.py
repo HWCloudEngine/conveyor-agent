@@ -18,12 +18,12 @@
 
 
 class TransformerTask(object):
-    
+
     def __init__(self, task_id, task_name=None, task_state=None):
         self.id = task_id
         self.task_name = task_name
         self.task_state = task_state
-    
+
     def get_state(self):
-        
+
         return self.task_state
