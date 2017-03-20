@@ -24,13 +24,11 @@ SHOULD include dedicated exception logging.
 
 import sys
 
-from oslo.config import cfg
+from oslo_config import cfg
+import six
+
 from conveyoragent.common import log as logging
-import oslo.six as six
-#import webob.exc
-
 from conveyoragent.i18n import _, _LE
-
 
 LOG = logging.getLogger(__name__)
 
@@ -44,7 +42,7 @@ CONF = cfg.CONF
 CONF.register_opts(exc_log_opts)
 
 
-#class ConvertedException(webob.exc.WSGIHTTPException):
+# class ConvertedException(webob.exc.WSGIHTTPException):
 #    def __init__(self, code=400, title="", explanation=""):
 #        self.code = code
 #        self.title = title
@@ -113,7 +111,6 @@ class V2vException(Exception):
 
     def __unicode__(self):
         return six.text_type(self.msg)
-
 
 
 class NotAuthorized(V2vException):
@@ -187,6 +184,7 @@ class NotFound(V2vException):
     code = 404
     safe = True
 
+
 class FileNotFound(NotFound):
     message = _("File %(file_path)s could not be found.")
 
@@ -221,6 +219,7 @@ class QuotaError(V2vException):
     code = 413
     headers = {'Retry-After': 0}
     safe = True
+
 
 class EvaluatorParseException(Exception):
     message = _("Error during evaluator parsing: %(reason)s")
@@ -258,11 +257,12 @@ class Forbidden(V2vException):
     msg_fmt = _("Not authorized.")
     code = 403
 
+
 class ReadOnlyFieldError(V2vException):
     msg_fmt = _('Cannot modify readonly field %(field)s')
-    
-    
-###dirdie gateway add exception###
+
+
+# dirdie gateway add exception
 class DownLoadDataError(V2vException):
 
     msg_fmt = _('DownLoad data failed: %(error)s')

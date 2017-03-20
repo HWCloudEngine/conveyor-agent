@@ -20,7 +20,7 @@ import os
 import stat
 import tempfile
 
-from oslo.utils import excutils
+from oslo_utils import excutils
 
 LOG = logging.getLogger(__name__)
 
@@ -97,6 +97,7 @@ def delete_if_exists(path, remove=os.unlink):
 @contextlib.contextmanager
 def remove_path_on_error(path, remove=delete_if_exists):
     """Protect code that wants to operate on PATH atomically.
+
     Any exception will cause PATH to be removed.
 
     :param path: File to work with

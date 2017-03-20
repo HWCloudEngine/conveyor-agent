@@ -17,17 +17,15 @@
 
 import math
 
-from Crypto.Random import random
-from oslo.config import cfg
+from oslo_config import cfg
 
-
-from conveyoragent import exception
-from conveyoragent.i18n import _
+from conveyoragent.brick import units
 from conveyoragent.common import log as logging
 from conveyoragent.common import processutils
 from conveyoragent.common import strutils
 from conveyoragent.common import timeutils
-from conveyoragent.brick import units
+from conveyoragent import exception
+from conveyoragent.i18n import _
 from conveyoragent import utils
 
 
@@ -216,5 +214,3 @@ def clear_volume(volume_size, volume_path, volume_clear=None,
     if duration < 1:
         duration = 1
     LOG.info(_('Elapsed time for clear volume: %.2f sec') % duration)
-
-

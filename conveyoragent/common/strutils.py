@@ -22,7 +22,7 @@ import re
 import sys
 import unicodedata
 
-import oslo.six as six
+import six
 
 from conveyoragent.common.gettextutils import _
 
@@ -121,6 +121,7 @@ def bool_from_string(subject, strict=False, default=False):
 
 def safe_decode(text, incoming=None, errors='strict'):
     """Decodes incoming text/bytes string using `incoming` if they're not
+
        already unicode.
 
     :param incoming: Text's current encoding

@@ -17,11 +17,9 @@
 import os
 import time
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
-from conveyoragent.brick import base
-from conveyoragent import utils
+from oslo_config import cfg
 
+from conveyoragent.common import log as logging
 from conveyoragent.engine.agent.ftp import ftplib
 
 

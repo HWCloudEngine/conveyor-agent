@@ -20,13 +20,10 @@ WSGI middleware for Hybrid-conveyoragent API.
 """
 
 from conveyoragent.common import log as logging
-
 from conveyoragent.engine.api import extensions
 import conveyoragent.engine.api.wsgi as wsgi
 
 from conveyoragent.engine.api.v1 import v2vgatewayservices
-
-
 
 LOG = logging.getLogger(__name__)
 
@@ -37,10 +34,9 @@ class APIRouter(wsgi.APIRouter):
 
     def _setup_routes(self, mapper, ext_mgr):
         LOG.debug("v2vgateway api service start")
-        self.resources['v2vGateWayServices'] = v2vgatewayservices.create_resource(ext_mgr)
+        self.resources['v2vGateWayServices'] = \
+            v2vgatewayservices.create_resource(ext_mgr)
         mapper.resource("v2vGateWayService", "v2vGateWayServices",
                         controller=self.resources['v2vGateWayServices'],
                         collection={'detail': 'GET'},
                         member={'action': 'POST'})
-
-       

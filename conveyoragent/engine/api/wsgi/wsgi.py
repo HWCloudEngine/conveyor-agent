@@ -20,14 +20,13 @@ import time
 from xml.dom import minidom
 from xml.parsers import expat
 
-#from lxml import etree
-from oslo.serialization import jsonutils
-from oslo.utils import excutils
-import oslo.six as six
+from lxml import etree
+from oslo_serialization import jsonutils
+from oslo_utils import excutils
+import six
 import webob
 
 from conveyoragent.common import log as logging
-
 from conveyoragent import exception
 from conveyoragent import i18n
 from conveyoragent.i18n import _, _LE, _LI
@@ -136,6 +135,7 @@ class Request(webob.Request):
 
     def cache_db_items(self, key, items, item_key='id'):
         """Allow API methods to store objects from a DB query to be
+
         used by API extensions within the same API request.
 
         An instance of this class only lives for the lifetime of a
@@ -146,6 +146,7 @@ class Request(webob.Request):
 
     def get_db_items(self, key):
         """Allow an API extension to get previously stored objects within
+
         the same API request.
 
         Note that the object data will be slightly stale.
@@ -154,6 +155,7 @@ class Request(webob.Request):
 
     def get_db_item(self, key, item_key):
         """Allow an API extension to get a previously stored object
+
         within the same API request.
 
         Note that the object data will be slightly stale.

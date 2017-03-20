@@ -22,7 +22,7 @@ import functools
 import inspect
 import logging
 
-from oslo.config import cfg
+from oslo_config import cfg
 import pkg_resources
 import six
 
@@ -41,8 +41,7 @@ deprecated_opts = [
 
 
 def list_opts():
-    """Entry point for oslo.config-generator.
-    """
+    """Entry point for oslo.config-generator."""
     return [(None, copy.deepcopy(deprecated_opts))]
 
 
@@ -200,6 +199,7 @@ class deprecated(object):
 
 def is_compatible(requested_version, current_version, same_major=True):
     """Determine whether `requested_version` is satisfied by
+
     `current_version`; in other words, `current_version` is >=
     `requested_version`.
 

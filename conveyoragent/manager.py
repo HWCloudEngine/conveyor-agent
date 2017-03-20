@@ -51,16 +51,12 @@ This module provides Manager, a base class for managers.
 
 """
 
+from oslo_config import cfg
+import oslo_messaging as messaging
 
-from oslo.config import cfg
 from conveyoragent.common import log as logging
-import oslo.messaging as messaging
-
-
 from conveyoragent.common import periodic_task
-
 from conveyoragent import version
-
 
 CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
@@ -111,4 +107,3 @@ class Manager(periodic_task.PeriodicTasks):
         for key in CONF:
             config[key] = CONF.get(key, None)
         return config
-

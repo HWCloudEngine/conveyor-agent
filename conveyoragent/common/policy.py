@@ -95,11 +95,11 @@ import logging
 import os
 import re
 
-from oslo.config import cfg
-from oslo.serialization import jsonutils
-import oslo.six as six
-import oslo.six.moves.urllib.parse as urlparse
-import oslo.six.moves.urllib.request as urlrequest
+from oslo_config import cfg
+from oslo_serialization import jsonutils
+import six
+import six.moves.urllib.parse as urlparse
+import six.moves.urllib.request as urlrequest
 
 from conveyoragent.common import fileutils
 from conveyoragent.common._i18n import _, _LE

@@ -19,14 +19,14 @@
 
 import sys
 
-from oslo.config import cfg
-from conveyoragent.common import log as logging
+from oslo_config import cfg
 
 from conveyoragent import i18n
 i18n.enable_lazy()
 
 # Need to register global_opts
 from conveyoragent.common import config  # noqa
+from conveyoragent.common import log as logging
 from conveyoragent import service
 from conveyoragent import version
 
@@ -36,10 +36,10 @@ CONF = cfg.CONF
 
 def main():
     CONF(sys.argv[1:], project='conveyoragent',
-         version=version.version_string())    
-    
+         version=version.version_string())
+
     logging.setup("conveyoragent")
- 
+
     launcher = service.process_launcher()
     server = service.WSGIService('conveyoragent_api')
     launcher.launch_service(server, workers=server.workers)

@@ -16,7 +16,7 @@ import logging
 import random
 import time
 
-from conveyoragent.oslo.config import cfg
+from oslo_config import cfg
 import six
 
 from conveyoragent.common._i18n import _, _LE, _LI
@@ -162,6 +162,7 @@ class _PeriodicTasksMeta(type):
 
 def _nearest_boundary(last_run, spacing):
     """Find nearest boundary which is in the past, which is a multiple of the
+
     spacing with the last run as an offset.
 
     Eg if last run was 10 and spacing was 7, the new last run could be: 17, 24,

@@ -37,9 +37,9 @@ import socket
 import sys
 import traceback
 
-from oslo.config import cfg
-import oslo.six as six
-from oslo.six import moves
+from oslo_config import cfg
+import six
+from six import moves
 
 _PY26 = sys.version_info[0:2] == (2, 6)
 
@@ -47,7 +47,7 @@ from conveyoragent.common.gettextutils import _
 from conveyoragent.common import importutils
 from conveyoragent.common import jsonutils
 from conveyoragent.common import local
-#from conveyoragent.common.hw_log_handler import FSSysLogHandler
+# from conveyoragent.common.hw_log_handler import FSSysLogHandler
 # NOTE(flaper87): Pls, remove when graduating this module
 # from the incubator.
 from conveyoragent.common.strutils import mask_password  # noqa
@@ -125,7 +125,7 @@ generic_log_opts = [
 
 DEFAULT_LOG_LEVELS = ['amqp=WARN', 'amqplib=WARN', 'boto=WARN',
                       'qpid=WARN', 'sqlalchemy=WARN', 'suds=INFO',
-                      'oslo.messaging=INFO', 'iso8601=WARN',
+                      'oslo_messaging=INFO', 'iso8601=WARN',
                       'requests.packages.urllib3.connectionpool=WARN',
                       'urllib3.connectionpool=WARN', 'websocket=WARN',
                       "keystonemiddleware=WARN", "routes.middleware=WARN",
@@ -492,7 +492,7 @@ def _setup_logging_from_conf(project, version):
                 syslog = RFCSysLogHandler(facility=facility)
             else:
                 syslog = RFCSysLogHandler(facility=facility)
-                #syslog = FSSysLogHandler(facility=facility)
+                # syslog = FSSysLogHandler(facility=facility)
             log_root.addHandler(syslog)
         except socket.error:
             log_root.error('Unable to add syslog handler. Verify that syslog'
@@ -520,7 +520,7 @@ def _setup_logging_from_conf(project, version):
                 logging.ERROR)
         except ImportError:
             handler = importutils.import_object(
-                "oslo.messaging.notify.log_handler.PublishErrorsHandler",
+                "oslo_messaging.notify.log_handler.PublishErrorsHandler",
                 logging.ERROR)
         log_root.addHandler(handler)
 

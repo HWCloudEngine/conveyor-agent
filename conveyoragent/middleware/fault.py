@@ -15,7 +15,7 @@
 #    under the License.
 
 from conveyoragent.common import log as logging
-import oslo.six as six
+import six
 import webob.dec
 import webob.exc
 

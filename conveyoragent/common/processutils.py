@@ -27,7 +27,7 @@ import signal
 
 from eventlet.green import subprocess
 from eventlet import greenthread
-import oslo.six as six
+import six
 
 from conveyoragent.common.gettextutils import _
 from conveyoragent.common import strutils
@@ -148,7 +148,7 @@ def execute(*cmd, **kwargs):
                 message=_('Command requested root, but did not '
                           'specify a root helper.'))
         cmd = shlex.split(root_helper) + list(cmd)
-        
+
     cmd = map(str, cmd)
     sanitized_cmd = strutils.mask_password(' '.join(cmd))
 

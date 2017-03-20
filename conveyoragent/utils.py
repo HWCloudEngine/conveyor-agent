@@ -35,18 +35,17 @@ from xml import sax
 from xml.sax import expatreader
 from xml.sax import saxutils
 
-#from oslo.concurrency import lockutils
-from oslo.config import cfg
+from oslo_config import cfg
 
-from oslo.utils import importutils
-from oslo.utils import timeutils
+from oslo_utils import importutils
+from oslo_utils import timeutils
 import retrying
-import oslo.six as six
+import six
 
 from conveyoragent.common import log as logging
 from conveyoragent.common import processutils
 from conveyoragent import exception
-from conveyoragent.i18n import _, _LE
+from conveyoragent.i18n import _
 
 
 CONF = cfg.CONF
@@ -54,7 +53,7 @@ LOG = logging.getLogger(__name__)
 ISO_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 PERFECT_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
-#synchronized = lockutils.synchronized_with_prefix('conveyoragent-')
+# synchronized = lockutils.synchronized_with_prefix('conveyoragent-')
 
 
 def find_config(config_path):
@@ -187,7 +186,8 @@ def create_channel(client, width, height):
 
 def cinderdir():
     import conveyoragent
-    return os.path.abspath(conveyoragent.__file__).split('conveyoragent/__init__.py')[0]
+    return os.path.abspath(conveyoragent.__file__).split(
+        'conveyoragent/__init__.py')[0]
 
 
 def last_completed_audit_period(unit=None):
@@ -544,37 +544,37 @@ def get_root_helper():
     return 'sudo conveyoragent-rootwrap %s' % CONF.rootwrap_config
 
 
-def brick_get_connector_properties(multipath=False, enforce_multipath=False):
-    """wrapper for the brick calls to automatically set
-    the root_helper needed for conveyoragent.
-
-    :param multipath:         A boolean indicating whether the connector can
-                              support multipath.
-    :param enforce_multipath: If True, it raises exception when multipath=True
-                              is specified but multipathd is not running.
-                              If False, it falls back to multipath=False
-                              when multipathd is not running.
-    """
-
-    root_helper = get_root_helper()
-    #return connector.get_connector_properties(root_helper,
-     #                                         CONF.my_ip,
-     #                                         multipath,
-     #                                         enforce_multipath)
-
-
-def brick_get_connector(protocol, driver=None,
-                        execute=processutils.execute,
-                        use_multipath=False,
-                        device_scan_attempts=3,
-                        *args, **kwargs):
-    """Wrapper to get a brick connector object.
-    This automatically populates the required protocol as well
-    as the root_helper needed to execute commands.
-    """
-
-    root_helper = get_root_helper()
-  
+# def brick_get_connector_properties(multipath=False, enforce_multipath=False):
+#     """wrapper for the brick calls to automatically set
+#     the root_helper needed for conveyoragent.
+#
+#     :param multipath:         A boolean indicating whether the connector can
+#                               support multipath.
+#     :param enforce_multipath: If True, it raises exception when
+#                               multipath=True
+#                               is specified but multipathd is not running.
+#                               If False, it falls back to multipath=False
+#                               when multipathd is not running.
+#     """
+#
+#     root_helper = get_root_helper()
+#     # return connector.get_connector_properties(root_helper,
+#     #                                          CONF.my_ip,
+#     #                                          multipath,
+#     #                                          enforce_multipath)
+#
+#
+# def brick_get_connector(protocol, driver=None,
+#                         execute=processutils.execute,
+#                         use_multipath=False,
+#                         device_scan_attempts=3,
+#                         *args, **kwargs):
+#     """Wrapper to get a brick connector object.
+#     This automatically populates the required protocol as well
+#     as the root_helper needed to execute commands.
+#     """
+#
+#     root_helper = get_root_helper()
 
 
 def get_file_mode(path):

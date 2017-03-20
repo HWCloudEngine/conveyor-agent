@@ -22,9 +22,9 @@ import os
 import string
 
 from eventlet import pools
-from oslo.config import cfg
+from oslo_config import cfg
 import paramiko
-import oslo.six as six
+import six
 
 from conveyoragent.common import log as logging
 from conveyoragent import exception
@@ -81,7 +81,8 @@ class SSHPool(pools.Pool):
         if 'hosts_key_file' in kwargs.keys():
             self.hosts_key_file = kwargs.pop('hosts_key_file')
             LOG.info(_LI("Secondary ssh hosts key file %(kwargs)s will be "
-                         "loaded along with %(conf)s from /etc/conveyoragent.conf."),
+                         "loaded along with %(conf)s from "
+                         "/etc/conveyoragent.conf."),
                      {'kwargs': self.hosts_key_file,
                       'conf': CONF.ssh_hosts_key_file})
 

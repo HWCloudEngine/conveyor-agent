@@ -14,14 +14,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-
-
-
-
-from oslo.config import cfg
-from conveyoragent.common import log as logging
+from oslo_config import cfg
 import paste.urlmap
 
+from conveyoragent.common import log as logging
 from conveyoragent.i18n import _LW
 
 
@@ -30,5 +26,6 @@ LOG = logging.getLogger(__name__)
 
 
 def root_app_factory(loader, global_conf, **local_conf):
-    LOG.warning(_LW('The conveyoragent api-paste.int v2v_gateway_api load start.'))
+    LOG.warning(_LW('The conveyoragent api-paste.int v2v_gateway_api '
+                    'load start.'))
     return paste.urlmap.urlmap_factory(loader, global_conf, **local_conf)

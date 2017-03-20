@@ -13,14 +13,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-
 import os
 import re
 import urllib
 
-from oslo.config import cfg
+from oslo_config import cfg
 
-import oslo.six.moves.urllib.parse as urlparse
+import six.moves.urllib.parse as urlparse
 import webob
 
 from conveyoragent.common import log as logging
@@ -272,20 +271,22 @@ class ViewBuilder(object):
         """Return an href string pointing to this object."""
         prefix = self._update_link_prefix(request.application_url,
                                           CONF.osapi_volume_base_URL)
-        return os.path.join(prefix,
-                            request.environ["conveyoragent.context"].project_id,
-                            self._collection_name,
-                            str(identifier))
+        return os.path.join(
+            prefix,
+            request.environ["conveyoragent.context"].project_id,
+            self._collection_name,
+            str(identifier))
 
     def _get_bookmark_link(self, request, identifier):
         """Create a URL that refers to a specific resource."""
         base_url = remove_version_from_href(request.application_url)
         base_url = self._update_link_prefix(base_url,
                                             CONF.osapi_volume_base_URL)
-        return os.path.join(base_url,
-                            request.environ["conveyoragent.context"].project_id,
-                            self._collection_name,
-                            str(identifier))
+        return os.path.join(
+            base_url,
+            request.environ["conveyoragent.context"].project_id,
+            self._collection_name,
+            str(identifier))
 
     def _get_collection_links(self, request, items, collection_name,
                               item_count, id_key="uuid"):

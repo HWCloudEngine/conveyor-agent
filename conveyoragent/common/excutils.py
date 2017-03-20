@@ -22,7 +22,7 @@ import sys
 import time
 import traceback
 
-import oslo.six as six
+import six
 
 from conveyoragent.common.gettextutils import _LE
 

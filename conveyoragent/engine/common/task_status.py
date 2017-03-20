@@ -19,6 +19,3 @@ status of a transformer task.
 
 TASK_STATUS = (TRANSFORMERING, FINISHED, ERROR) = (
                'DATA_TRANSFORMING', 'DATA_TRANS_FINISHED', 'DATA_TRANS_FAILED')
-
-
-

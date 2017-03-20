@@ -29,15 +29,15 @@ import time
 import eventlet
 import eventlet.wsgi
 import greenlet
-from oslo.config import cfg
-from conveyoragent.common import log as logging
-from oslo.utils import excutils
-from oslo.utils import netutils
+from oslo_config import cfg
+from oslo_utils import excutils
+from oslo_utils import netutils
 from paste import deploy
 import routes.middleware
 import webob.dec
 import webob.exc
 
+from conveyoragent.common import log as logging
 from conveyoragent import exception
 from conveyoragent.i18n import _, _LE, _LI
 from conveyoragent import utils
