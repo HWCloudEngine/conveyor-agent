@@ -19,9 +19,9 @@ It can't be called 'extensions' because that causes namespacing problems.
 
 """
 
-from oslo.config import cfg
+from oslo_config import cfg
+from oslo_log import log as logging
 
-from conveyoragent.common import log as logging
 from conveyoragent.engine.api import extensions
 
 

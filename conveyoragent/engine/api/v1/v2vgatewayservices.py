@@ -15,24 +15,14 @@
 
 """The conveyoragent api."""
 
-import ast
-
-
-
-import webob
 from webob import exc
 
-from conveyoragent.common import log as logging
-from conveyoragent.engine.api.wsgi import wsgi
-from conveyoragent import exception
-from conveyoragent.i18n import _, _LI
-from conveyoragent import utils
-
-from conveyoragent.engine.server import manager
+from oslo_log import log as logging
 
 from conveyoragent.engine.api.view import v2vgatewayservices as services_view
-
-
+from conveyoragent.engine.api.wsgi import wsgi
+from conveyoragent.engine.server import manager
+from conveyoragent.i18n import _
 
 LOG = logging.getLogger(__name__)
 
@@ -49,7 +39,7 @@ class V2vGateWayServiceController(wsgi.Controller):
     def show(self, req, id):
         """Return data about the given resource."""
         LOG.debug("Query task state start: %s", id)
-        
+
         try:
             state = self.migration_manager.query_data_transformer_state(id)
             LOG.debug("Query task state end: %s", id)
@@ -61,7 +51,7 @@ class V2vGateWayServiceController(wsgi.Controller):
             raise exc.HTTPBadRequest(explanation=msg)
 
     def delete(self, req, id):
-        """Delete resource."""     
+        """Delete resource."""
         LOG.debug("delete test!")
         return
 
@@ -76,26 +66,25 @@ class V2vGateWayServiceController(wsgi.Controller):
 
     def create(self, req, body):
         """DownLoad data from source volume"""
-        
+
         if not self.is_valid_body(body, 'clone_volume'):
             LOG.debug("V2v gateway download data request not key:clone_volume")
-            raise exc.HTTPUnprocessableEntity()          
+            raise exc.HTTPUnprocessableEntity()
         volume = body['clone_volume']
-        
+
         try:
             state = self.migration_manager.clone_volume(volume)
-            
+
             return self.viewBulid.create(state)
-                 
+
         except Exception as e:
             LOG.error("Clone volume data error: %s", e)
             msg = _("clone volume data failed")
             raise exc.HTTPBadRequest(explanation=msg)
-            
 
     def update(self, req, id, body):
         """Update a resource."""
-    
+
         pass
 
 

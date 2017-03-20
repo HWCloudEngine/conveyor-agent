@@ -18,10 +18,10 @@
 WSGI middleware for OpenStack API controllers.
 """
 
-
 import routes
 
-from conveyoragent.common import log as logging
+from oslo_log import log as logging
+
 from conveyoragent.engine.api.wsgi import wsgi
 from conveyoragent.i18n import _, _LW
 from conveyoragent import wsgi as base_wsgi

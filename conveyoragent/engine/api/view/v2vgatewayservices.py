@@ -12,24 +12,23 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-from conveyoragent.common import log as logging
+
+from oslo_log import log as logging
 
 from conveyoragent.engine.api.common import ViewBuilder
 
 LOG = logging.getLogger(__name__)
 
+
 class ViewBuilder(ViewBuilder):
-    
+
     def list(self, results):
         pass
-    
-    def show(self,result):
-        rsp = {'body':{'task_state': result
-                               }}
+
+    def show(self, result):
+        rsp = {'body': {'task_state': result}}
         return rsp
-    
+
     def create(self, result):
-        rsp = {'body':{'task_id': result
-                               }}
+        rsp = {'body': {'task_id': result}}
         return rsp
-    

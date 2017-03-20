@@ -18,8 +18,6 @@
    and root_helper settings, so this provides that hook.
 """
 
-from conveyoragent.common import processutils as putils
-
 
 class Executor(object):
     def __init__(self, root_helper, execute=None,
@@ -29,8 +27,6 @@ class Executor(object):
 
     def set_execute(self, execute):
         self._execute = execute
-        
+
     def set_root_helper(self, helper):
         self._root_helper = helper
-
-
