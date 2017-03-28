@@ -167,7 +167,7 @@ class MigrationCmd(BaseCmd):
             return out
         except putils.ProcessExecutionError as e:
             LOG.error("umount disk error: %s", e)
-            return None
+            return -1
 
     def remove_dir(self, dir_mame):
 
@@ -178,7 +178,7 @@ class MigrationCmd(BaseCmd):
         except putils.ProcessExecutionError as e:
             LOG.error("remove directory %(dir)s error: %(error)s",
                       {'dir': dir_mame, 'error': e})
-            return None
+            return -1
 
     def get_disk_info(self, disk_name):
 
@@ -201,9 +201,82 @@ class MigrationCmd(BaseCmd):
             (out, err) = self._execute('mkdir', '-p', dir_name,
                                        run_as_root=True)
             return out
-
         except putils.ProcessExecutionError as e:
             LOG.error("execute CMD 'mkdir -p %(dir_name)s' error,"
                       " error detail is %(error)s",
                       {'dir_name': dir_name, 'error': e})
+            raise exception.MakeDirError(error=e)
+
+    def fillp_start_server(self, port, protocol):
+
+        LOG.debug("Fillp server start for %s", port)
+        try:
+            (out, err) = self._execute('fillp', 'start', 'server',
+                                       '-p', port, '-o', protocol,
+                                       run_as_root=True)
+            return out
+        except putils.ProcessExecutionError as e:
+            _msg = 'Fill server start error: %s' % unicode(e)
+            LOG.error(_msg)
+            raise exception.FillServerError(error=_msg)
+
+    def fill_send_data(self, address, port, src_dev, des_dev,
+                       protocol, offset=0):
+        LOG.debug('Fillp send data start for %(src_dev)s to %(des_dev)s',
+                  {'src_dev': src_dev, 'des_dev': des_dev})
+        try:
+            (out, err) = self._execute('fillp', 'send',
+                                       '-p', address,
+                                       '-p', port,
+                                       '-s', src_dev,
+                                       '-t', des_dev,
+                                       '-b', offset,
+                                       '-o', protocol,
+                                       run_as_root=True)
+            return out
+        except putils.ProcessExecutionError as e:
+            _msg = 'Fillp send data error: %s' % unicode(e)
+            LOG.error(_msg)
+            raise exception.FillServerError(error=_msg)
+
+    def fillp_query_status(self, service):
+        LOG.debug('Fillp query status start for %(service)s',
+                  {'service': service})
+        try:
+            (out, err) = self._execute('ps', 'aux', run_as_root=True)
+            lines = out.split('\n')
+            for line in lines:
+                if service in line:
+                    return 0
+            return 1
+        except putils.ProcessExecutionError as e:
+            _msg = 'Fillp query status error: %s' % unicode(e)
+            LOG.error(_msg)
+            raise exception.FillServerError(error=_msg)
+
+    def fillp_close_connect(self, service, protocol):
+        LOG.debug('Fillp stop server start')
+        try:
+            (out, err) = self._execute('fillp', 'close',
+                                       service, '-o', protocol,
+                                       run_as_root=True)
+            return out
+        except putils.ProcessExecutionError as e:
+            _msg = 'Fillp stop error: %s' % unicode(e)
+            LOG.error(_msg)
+            raise exception.FillServerError(error=_msg)
+
+    def get_all_disk(self):
+        try:
+            (out, _) = self._execute('lsblk', '-lf', run_as_root=True)
+            lines = out.strip().split('\n')[1:]
+            rs = []
+            for line in lines:
+                inline = line.split(" ")
+                if len(inline) > 0:
+                    rs.append('/dev/' + inline[0])
+            return rs
+        except putils.ProcessExecutionError as e:
+            LOG.error("Execute lsblk error, error detail is %(error)s",
+                      {'error': e})
             raise exception.MakeDirError(error=e)

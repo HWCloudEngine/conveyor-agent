@@ -96,13 +96,13 @@ class MigrationActionController(wsgi.Controller):
     @wsgi.action('getDiskName')
     def _get_disk_name(self, req, id, body):
 
-        volume_id = body['getDiskName']['volume_id']
-        LOG.debug("Query volume %s dev name start", volume_id)
-        out = self.migration_manager.get_disk_name(defaultContext, volume_id)
+        # volume_id = body['getDiskName']['volume_id']
+        # LOG.debug("Query volume %s dev name start", volume_id)
+        out = self.migration_manager.get_disk_name(defaultContext)
         resp = {"dev_name": out}
 
         LOG.debug("Query volume %(volume_id)s dev name %(dev_name)s end",
-                  {'volume_id': volume_id, 'dev_name': out})
+                  {'dev_name': out})
         return resp
 
     @wsgi.action('mountDisk')
@@ -138,6 +138,39 @@ class MigrationActionController(wsgi.Controller):
         out = self.migration_manager.force_umont_disk(defaultContext,
                                                       mount_point)
         resp = {"umount_disk": out}
+        return resp
+
+    @wsgi.action('fillpTransFormerData')
+    def _fillp_trans_data(self, req, id, body):
+        LOG.debug("Start send data to clone vm")
+        data_body = body['fillpTransFormerData']
+        trans_ip = data_body.get('trans_ip')
+        trans_port = data_body.get('trans_port')
+        src_disk = data_body.get('src_disk')
+        des_disk = data_body.get('des_disk')
+        protocol = data_body.get('protocol')
+
+        self.migration_manager.start_transformer_data(trans_ip,
+                                                      trans_port,
+                                                      src_disk,
+                                                      des_disk,
+                                                      protocol=protocol)
+        resp = {"code": "200"}
+        LOG.debug("End send data to clone vm")
+        return resp
+
+    @wsgi.action("fillpTransFormerStatus")
+    def _fillp_trans_status(self, req, id, body):
+        LOG.debug("Start query transformer data status")
+        data_body = body['fillpTransFormerStatus']
+        protocol = data_body.get('protocol')
+        try:
+            out = self.migration_manager.fillp_transformer_data_status(
+                protocol)
+        except Exception:
+            out = -1
+        resp = {"status": out}
+        LOG.debug("End query transformer data status: %s", out)
         return resp
 
 

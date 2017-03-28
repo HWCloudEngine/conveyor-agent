@@ -1,6 +1,4 @@
-# Copyright 2010 United States Government as represented by the
-# Administrator of the National Aeronautics and Space Administration.
-# All Rights Reserved.
+# Copyright 2017 Huawei, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -15,17 +13,21 @@
 #    under the License.
 
 from oslo_config import cfg
-from oslo_log import log as logging
-import paste.urlmap
+from oslo_utils import importutils
 
-from conveyoragent.i18n import _LW
+api_opts = [
+    cfg.StrOpt('conveyor_api_class',
+               default=None,
+               help=''),
+]
+cfg.CONF.register_opts(api_opts)
 
 
-CONF = cfg.CONF
-LOG = logging.getLogger(__name__)
+def API():
+    conveyor_api_class = cfg.CONF.conveyor_api_class
 
+    if conveyor_api_class is None:
+        conveyor_api_class = 'conveyoragent.conveyor.conveyor.API'
 
-def root_app_factory(loader, global_conf, **local_conf):
-    LOG.warning(_LW('The conveyoragent api-paste.int v2v_gateway_api '
-                    'load start.'))
-    return paste.urlmap.urlmap_factory(loader, global_conf, **local_conf)
+    cls = importutils.import_class(conveyor_api_class)
+    return cls()

@@ -29,7 +29,7 @@ from oslo_utils import importutils
 from conveyoragent.common import service
 from conveyoragent import context
 from conveyoragent import exception
-from conveyoragent.i18n import _, _LE, _LI, _LW
+from conveyoragent.i18n import _, _LI, _LW
 from conveyoragent import version
 from conveyoragent import wsgi
 

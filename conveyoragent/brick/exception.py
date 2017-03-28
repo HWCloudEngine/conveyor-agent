@@ -95,3 +95,7 @@ class MountDiskError(BrickException):
 
 class MakeDirError(BrickException):
     message = _('Make directory CMDerror:%(error)s"')
+
+
+class FillServerError(BrickException):
+    message = _('Fillp server cmd error:%(error)s')
