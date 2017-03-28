@@ -23,7 +23,6 @@ import os
 
 from oslo_concurrency import processutils
 from oslo_config import cfg
-from oslo_db import exception as db_exc
 from oslo_log import log as logging
 from oslo_utils import importutils
 
@@ -290,34 +289,35 @@ class Service(service.Service):
 
     def report_state(self):
         """Update the state of this service in the datastore."""
+        pass
         # ctxt = context.get_admin_context()
         # zone = CONF.storage_availability_zone
         # state_catalog = {}
-        try:
-            # try:
-            #     service_ref = db.service_get(ctxt, self.service_id)
-            # except exception.NotFound:
-            #   LOG.debug('The service database object disappeared, '
-            #             'recreating it.')
-            #   self._create_service_ref(ctxt)
-            #     service_ref = db.service_get(ctxt, self.service_id)
-            #
-            # state_catalog['report_count'] = service_ref['report_count'] + 1
-            # if zone != service_ref['availability_zone']:
-            #     state_catalog['availability_zone'] = zone
-            #
-            # db.service_update(ctxt,
-            #                  self.service_id, state_catalog)
-
-            # TODO(termie): make this pattern be more elegant.
-            if getattr(self, 'model_disconnected', False):
-                self.model_disconnected = False
-                LOG.error(_LE('Recovered model server connection!'))
-
-        except db_exc.DBConnectionError:
-            if not getattr(self, 'model_disconnected', False):
-                self.model_disconnected = True
-                LOG.exception(_LE('model server went away'))
+        # try:
+        #     try:
+        #         service_ref = db.service_get(ctxt, self.service_id)
+        #     except exception.NotFound:
+        #       LOG.debug('The service database object disappeared, '
+        #                 'recreating it.')
+        #       self._create_service_ref(ctxt)
+        #         service_ref = db.service_get(ctxt, self.service_id)
+        #
+        #     state_catalog['report_count'] = service_ref['report_count'] + 1
+        #     if zone != service_ref['availability_zone']:
+        #         state_catalog['availability_zone'] = zone
+        #
+        #     db.service_update(ctxt,
+        #                      self.service_id, state_catalog)
+        #
+        #     # TODO(termie): make this pattern be more elegant.
+        #     if getattr(self, 'model_disconnected', False):
+        #         self.model_disconnected = False
+        #         LOG.error(_LE('Recovered model server connection!'))
+        #
+        # except db_exc.DBConnectionError:
+        #     if not getattr(self, 'model_disconnected', False):
+        #         self.model_disconnected = True
+        #         LOG.exception(_LE('model server went away'))
 
 
 class WSGIService(object):

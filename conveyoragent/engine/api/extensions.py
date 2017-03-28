@@ -18,7 +18,6 @@ import os
 
 from oslo_config import cfg
 from oslo_log import log as logging
-from oslo_policy import policy
 from oslo_utils import importutils
 import webob.dec
 import webob.exc
@@ -371,28 +370,3 @@ def load_standard_extensions(ext_mgr, logger, path, package, ext_list=None):
 
         # Update the list of directories we'll explore...
         dirnames[:] = subdirs
-
-
-def extension_authorizer(api_name, extension_name):
-    def authorize(context, target=None, action=None):
-        if target is None:
-            target = {'project_id': context.project_id,
-                      'user_id': context.user_id}
-        if action is None:
-            act = '%s_extension:%s' % (api_name, extension_name)
-        else:
-            act = '%s_extension:%s:%s' % (api_name, extension_name, action)
-        policy.enforce(context, act, target)
-    return authorize
-
-
-def soft_extension_authorizer(api_name, extension_name):
-    hard_authorize = extension_authorizer(api_name, extension_name)
-
-    def authorize(context):
-        try:
-            hard_authorize(context)
-            return True
-        except exception.NotAuthorized:
-            return False
-    return authorize
