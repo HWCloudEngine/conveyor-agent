@@ -1,0 +1,270 @@
+#!/bin/bash
+
+#CONSISTENT VARIABLE VALUE
+FILLP_PROTOCOL=fillp
+SOCKET_PROTOCOL=socket
+BIN_DIR=/usr/local/bin
+LOG_DIR=/var/log/conveyoragent
+LOG_FILE=${LOG_DIR}/fillp_cmd.log
+TIME_CMD=`date '+%Y-%m-%d %H:%M%S'`
+ERROR_INT=2
+
+####################################################
+#Function: start
+#Description: start server service
+#Parameter:
+#input:
+#$1 -- port
+#output: NA
+#Return:
+#RET_OK
+#Since
+#
+#Others:NA
+########################################################
+start() {
+
+    echo ${TIME_CMD} "Start fillp server begin"
+	obj=$1
+	shift
+	opts=$@
+	if [ "$obj"x != "server"x ]; then
+	    echo ${TIME_CMD} "Start fillp server failed: Invalid args $obj."
+		return ${ERROR_INT}
+	fi
+	
+	#get args
+	while getopts "d:p:t:o:" opts
+	do
+	    case $opts in
+                        d)
+                           ip=$OPTARG
+                           ;;
+		        p)
+			    port=$OPTARG
+				;;
+                        t)
+                           des_file=$OPTARG
+                           ;;
+			o)
+			    protocol=$OPTARG
+				;;
+			*)
+			    echo ${TIME_CMD} "Start server failed: Invalid input $opts"
+				return ${ERROR_INT}
+				;;
+		esac
+	done
+	
+	#exec create
+	if [ "${protocol}"x = "${FILLP_PROTOCOL}"x ]; then
+	    fillp-server ${port}
+	elif [ "${protocol}"x = "${SOCKET_PROTOCOL}"x ]; then
+	    socket-server ${ip} ${port} ${des_file}
+	else
+	    echo ${TIME_CMD} "Start server failed: Invalid input protocol ${protocol}."
+	    return ${ERROR_INT}
+	fi
+	
+	if [ $? -ne 0 ]; then
+	    echo ${TIME_CMD} "Start server failed: execute fillp cmd error."
+	    return ${ERROR_INT}
+	fi
+	echo ${TIME_CMD} "Start server successfully for ${protocol} protocol."
+	return 0
+}
+
+
+####################################################
+#Function: send
+#Description: start data transformer
+#Parameter:
+#input:
+#$1 -- server ip
+#$2 -- server port
+#$3 -- source dev or file name
+#$4 -- des dev or file name
+#output: NA
+#Return:
+#RET_OK
+#Since
+#
+#Others:NA
+########################################################
+send(){
+
+    echo ${TIME_CMD} "Fillp send data begin"
+	opts=$@
+	#get args
+	while getopts "d:p:s:t:b:o:" opts
+	do
+	    case $opts in
+		    d)
+			    address=$OPTARG;;
+			p)
+			    port=$OPTARG;;
+		    s)
+			    source_file=$OPTARG;;
+			t)
+			    des_file=$OPTARG;;
+		    b)
+			    bytes=$OPTARG;;
+			o)
+			    protocol=$OPTARG;;
+			*)
+			    echo ${TIME_CMD} "Start send data failed: Invalid input $opts"
+				return ${ERROR_INT}
+				;;
+		esac
+	done
+	
+	if [ "${protocol}"x = "${FILLP_PROTOCOL}"x ]; then
+	    fillp-client ${address} ${port} ${source_file} ${des_file} ${bytes}
+	elif [ "${protocol}"x = "${SOCKET_PROTOCOL}"x ]; then
+	    socket-client ${address} ${port} ${source_file} ${des_file} ${bytes}
+	else
+	    echo ${TIME_CMD} "Start send data failed: Invalid input protocol ${protocol}."
+	    return ${ERROR_INT}
+	fi
+	
+	
+	if [ $? -ne 0 ]; then
+	    echo ${TIME_CMD} "Start send data failed: execute fillp cmd error."
+	    return ${ERROR_INT}
+	fi
+	
+	echo ${TIME_CMD} "Fillp send data successfully for ${protocol} protocol."
+	return 0	
+}
+
+
+####################################################
+#Function: status
+#Description: query data transformer status
+#Parameter:
+#input:
+#$1 -- server ip
+#output: NA
+#Return:
+#RET_OK
+#Since
+#
+#Others:NA
+########################################################
+status() {
+
+    obj=$1
+	if [ "${obj}"x = "${FILLP_PROTOCOL}"x ]; then
+	    pgrep -f "fillp-client" && {
+		    echo "Fillp data transformering..."
+			return 0
+		} || {
+		    echo "Fillp data transformering finished"
+			return 1
+		}
+	else
+	    pgrep -f "socket-client" && {
+		    echo "Socket data transformering..."
+			return 0
+		} || {
+		    echo "Socket data transformering finished"
+			return 1
+		}
+    fi
+	
+}
+
+####################################################
+#Function: close
+#Description: close fillp server or client
+#Parameter:
+#input:
+#$1 -- 'server' or client
+#output: NA
+#Return:
+#RET_OK
+#Since
+#
+#Others:NA
+########################################################
+close() {
+
+    echo ${TIME_CMD} "begin stop fillp service"
+	obj=$1
+	shift
+	opt=$@
+	while getopts "o:" opts
+	do
+	    case $opts in
+			o)
+			    protocol=$OPTARG
+                            ;;
+			*)
+			    echo ${TIME_CMD} "Stop fillp service failed: Invalid input $opts"
+				return ${ERROR_INT}
+				;;
+		esac
+	done
+	if [ "${obj}"x = "server"x ]; then
+	    if [ "${protocol}"x = "${FILLP_PROTOCOL}"x ]; then
+	        pgrep -f "fillp-server" && {
+		        pkill -f "fillp-server"
+			    echo "stop service fillp-server successful."
+		    } || {
+		        echo "service fillp-server not started"
+		    }
+	    else
+	        pgrep -f "socket-server" && {
+		        pkill -f "socket-server"
+			    echo "stop service socket-server successful."
+		    } || {
+		        echo "service socket-server not started"
+		    }
+        fi
+
+	elif [ "${obj}"x = "client"x ]; then
+	    if [ "${protocol}"x = "${FILLP_PROTOCOL}"x ]; then
+	        pgrep -f "fillp-client" && {
+		        pkill -f "fillp-client"
+			    echo "stop service fillp-client successful."
+		    } || {
+		        echo "service fillp-client not started"
+		    }
+	    else
+	        pgrep -f "socket-client" && {
+		        pkill -f "socket-client"
+			    echo "stop service socket-client successful."
+		    } || {
+		        echo "service socket-client not started"
+		    }
+        fi
+	else
+	    echo ${TIME_CMD} "Stop fillp service failed: Invalid input $opts"
+		return ${ERROR_INT} 
+    fi
+
+    return 0	
+}
+
+
+####################################################
+#Function: help 
+#Description: display CMD help information
+#Parameter:
+#input: NA
+#output: NA
+#Return:
+#RET_OK
+#Since
+#
+#Others:NA
+########################################################
+help() {
+    echo "all cmd format:"
+	echo "fillp start server -p port(eg:8080)"
+	echo "fillp send -d ip -p port -s src_dev -t des_dev -b byte"
+	echo "fillp close server/client"
+}
+
+
+echo start send status close | grep -w ${1:-NOT} >/dev/null && $@ >> "${LOG_FILE}" 2>&1

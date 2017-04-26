@@ -252,7 +252,7 @@ class MigrationManager(object):
         task_id = None
         if 'ftp' == protocol:
             task_id = self._ftp_copy_volume(volume)
-        elif protocol in ['fillp', 'socker']:
+        elif protocol in ['fillp', 'socket']:
             task_id = self._fillp_copy_volume(volume, protocol)
         else:
             LOG.error("Copy volume error: protocol %s not support", protocol)
@@ -322,11 +322,20 @@ class MigrationManager(object):
         if mount_dir:
             mount = mount_dir[0]
 
+        des_urls = des_vm_url.split(':')
+        if len(des_urls) != 2:
+            LOG.error("Inpute source gw url error: %s", des_vm_url)
+            msg = "Inpute source gw url error: %s" % des_vm_url
+            raise exception.InvalidInput(reason=msg)
+
+        des_ip = des_urls[0]
+
         # 2. start fillp server
         trans_port = volume.get('trans_port')
         agent_driver = self.agents.get(protocol)
         try:
-            agent_driver.start_fillp_server(trans_port, protocol)
+            agent_driver.start_fillp_server(des_ip, trans_port,
+                                            dev_disk_name, protocol)
         except Exception as e:
             _msg = "Conveyor agent start fillp server error: %s" % e
             LOG.error(_msg)
@@ -342,14 +351,6 @@ class MigrationManager(object):
 
         src_vm_ip = src_urls[0]
         src_vm_port = src_urls[1]
-
-        des_urls = des_vm_url.split(':')
-        if len(des_urls) != 2:
-            LOG.error("Inpute source gw url error: %s", des_vm_url)
-            msg = "Inpute source gw url error: %s" % des_vm_url
-            raise exception.InvalidInput(reason=msg)
-
-        des_ip = des_urls[0]
 
         try:
             # create transformer task and return task id for querying it's

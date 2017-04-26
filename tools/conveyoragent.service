@@ -1,0 +1,14 @@
+[Unit]
+Description=ConveyorAgent
+After=syslog.target network.target
+
+[Service]
+ExecStart=/usr/bin/conveyoragent
+Type=notify
+KillMode=control-group
+Restart=always
+ReStartSec=15s
+User=root
+
+[Install]
+WantedBy=multi-user.target

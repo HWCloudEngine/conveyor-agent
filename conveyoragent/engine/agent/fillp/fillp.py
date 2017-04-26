@@ -31,9 +31,9 @@ class FillAgent(object):
         root_helper = utils.get_root_helper()
         self.cmd_process = base.MigrationCmd(root_helper)
 
-    def start_fillp_server(self, port, protocol):
+    def start_fillp_server(self, address, port, des_dev, protocol):
         try:
-            args = [port, protocol]
+            args = [address, port, des_dev, protocol]
             fillp_thread = AgentThread(self._start_fillp_server, *args)
             fillp_thread.start()
             return fillp_thread
@@ -42,11 +42,23 @@ class FillAgent(object):
             LOG.error(_msg)
             raise exception.DownLoadDataError(error=_msg)
 
-    def _start_fillp_server(self, port, protocol):
+    def _start_fillp_server(self, address, port, des_dev, protocol):
         try:
-            self.cmd_process.fillp_start_server(port, protocol)
+            self.cmd_process.fillp_start_server(address, port,
+                                                des_dev, protocol)
         except Exception as e:
             _msg = "Start fillp service failed: %s" % unicode(e)
+            LOG.error(_msg)
+            raise exception.DownLoadDataError(error=_msg)
+
+    def transformer_data(self, address, port, src_dev, des_dev, protocol):
+        try:
+            args = [address, port, src_dev, des_dev, protocol]
+            fillp_thread = AgentThread(self._transformer_data, *args)
+            fillp_thread.start()
+            return fillp_thread
+        except Exception as e:
+            _msg = "Fillp transformer data failed: %s" % unicode(e)
             LOG.error(_msg)
             raise exception.DownLoadDataError(error=_msg)
 

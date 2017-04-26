@@ -207,12 +207,15 @@ class MigrationCmd(BaseCmd):
                       {'dir_name': dir_name, 'error': e})
             raise exception.MakeDirError(error=e)
 
-    def fillp_start_server(self, port, protocol):
+    def fillp_start_server(self, address, port, des_dev, protocol):
 
         LOG.debug("Fillp server start for %s", port)
         try:
             (out, err) = self._execute('fillp', 'start', 'server',
-                                       '-p', port, '-o', protocol,
+                                       '-d', address,
+                                       '-p', port,
+                                       '-t', des_dev,
+                                       '-o', protocol,
                                        run_as_root=True)
             return out
         except putils.ProcessExecutionError as e:
@@ -226,7 +229,7 @@ class MigrationCmd(BaseCmd):
                   {'src_dev': src_dev, 'des_dev': des_dev})
         try:
             (out, err) = self._execute('fillp', 'send',
-                                       '-p', address,
+                                       '-d', address,
                                        '-p', port,
                                        '-s', src_dev,
                                        '-t', des_dev,

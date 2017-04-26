@@ -130,7 +130,7 @@ class VServiceManager(base.Manager):
         body = {'fillpTransFormerData':
                     {'trans_ip': address,
                      'trans_port': port,
-                     'src_dev': src_dev,
+                     'src_disk': src_dev,
                      'des_disk': des_dev,
                      'protocol': protocol}}
         url = '/v2vGateWayServices/%s/action' % uuidutils.generate_uuid()
